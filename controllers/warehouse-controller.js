@@ -9,25 +9,25 @@ const index = async (_request, response) => {
     }
 }
 
-const findOne = async (request, response) => {
-    try {
-        const warehouseFound = await knex('warehouses')
-            .where({ id: request.params.id });
+// const findOne = async (request, response) => {
+//     try {
+//         const warehouseFound = await knex('warehouses')
+//             .where({ id: request.params.id });
 
-        if (warehouseFound.length === 0) {
-            return response.status(404).json({
-                message: `Warehouse with the id ${request.params.id} cannot be found`
-            });
-        }
+//         if (warehouseFound.length === 0) {
+//             return response.status(404).json({
+//                 message: `Warehouse with the id ${request.params.id} cannot be found`
+//             });
+//         }
 
-        const warehouseData = warehouseFound[0];
-        response.json(warehouseData);
-    } catch (error) {
-        response.status(500).json({
-            message: `Warehouse not found with the id of ${request.params.id}`,
-        });
-    }
-};
+//         const warehouseData = warehouseFound[0];
+//         response.json(warehouseData);
+//     } catch (error) {
+//         response.status(500).json({
+//             message: `Warehouse not found with the id of ${request.params.id}`,
+//         });
+//     }
+// };
 
 const add = async (request, response) => {
     try {
@@ -45,6 +45,5 @@ const add = async (request, response) => {
 }
 module.exports = {
     index,
-    findOne,
     add,
 };
