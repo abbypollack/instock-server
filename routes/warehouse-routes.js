@@ -8,4 +8,9 @@ router
     .get(warehouseControl.index)
     .post(warehouseControl.add)
 
+router
+    .route("/:id")
+    .get(warehouseControl.index)
+    .patch(warehouseControl.edit)
+
 module.exports = router;

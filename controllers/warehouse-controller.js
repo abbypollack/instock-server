@@ -11,7 +11,6 @@ const index = async (_request, response) => {
 
 const add = async (request, response) => {
     try {
-        const { id } = request.params;
         const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = request.body;
         if (!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email) {
             return response.status(400).json({ error: "Please fill in all required fields" });
@@ -42,10 +41,28 @@ const add = async (request, response) => {
 }
 
 const edit = async (request, response) => {
-    
-}
+    try {
+        const editWarehouse = await knex('warehouses')
+            .where({ id: request.params.id })
+            .update(request.body);
+        if (editWarehouse === 0) {
+            return response.status(404).json({
+                message: `Cannot find a warehouse with that ID of ${request.params.id}`
+            });
+        }
+        else{
+            response.status(201).json(editWarehouse);
+        }
+
+    } catch (error) {
+        response.status(500).json({
+            message: `sorry coudn't update ${request.params.id}:${error}`
+        })
+    }
+};
 
 module.exports = {
     index,
     add,
+    edit,
 };
