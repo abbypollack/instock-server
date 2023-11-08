@@ -9,40 +9,24 @@ const index = async (_request, response) => {
     }
 }
 
-// const findOne = async (request, response) => {
-//     try {
-//         const warehouseFound = await knex('warehouses')
-//             .where({ id: request.params.id });
-
-//         if (warehouseFound.length === 0) {
-//             return response.status(404).json({
-//                 message: `Warehouse with the id ${request.params.id} cannot be found`
-//             });
-//         }
-
-//         const warehouseData = warehouseFound[0];
-//         response.json(warehouseData);
-//     } catch (error) {
-//         response.status(500).json({
-//             message: `Warehouse not found with the id of ${request.params.id}`,
-//         });
-//     }
-// };
-
 const add = async (request, response) => {
-    try {
-        const result = await knex ('warehouses').insert(request.body);
+    try{
+        const { id } = request.params;
+        const { warehouses_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = request.body;
 
-        const newHouseId = result[0];
-        const createdWarehouse = await knex('warehouses').where({ id: newHouseId});
-
-        response.status(201).json(createdWarehouse);
-    } catch (error) {
+        if (!warehouses_name || !address || !city || !country, !contact_name || !contact_position || !contact_phone, !contact_email){
+            return response.status(400).json({error: "Please fill in all required fields"});
+        }
+        else{
+            response.send(request.body)
+        }
+    } catch{
         response.status(500).json({
             message: `Can't create new warehouse: ${error}`
         })
     }
 }
+
 module.exports = {
     index,
     add,
