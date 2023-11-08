@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const inventoryRoutes = require('./routes/inventory'); // Importing router from inventory.js
 
+
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
