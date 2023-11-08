@@ -4,7 +4,7 @@ const warehouseControl = require("../controllers/warehouse-controller");
 const { v4: uuidv4 } = require('uuid');
 
 router
-    .route("/warehouses")
+    .route("/")
     .get(warehouseControl.index)
     .post(warehouseControl.add)
 
