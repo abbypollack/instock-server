@@ -12,15 +12,19 @@ const index = async (_request, response) => {
 const add = async (request, response) => {
     try{
         const { id } = request.params;
-        const { warehouses_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = request.body;
+        const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = request.body;
 
-        if (!warehouses_name || !address || !city || !country, !contact_name || !contact_position || !contact_phone, !contact_email){
+        if (!warehouse_name || !address || !city || !country, !contact_name || !contact_position || !contact_phone, !contact_email){
             return response.status(400).json({error: "Please fill in all required fields"});
         }
         else{
-            response.send(request.body)
+            const result = await knex('warehouses').insert(request.body);
+
+            const newWarehouseId = result[0];
+            const createdWarehouse = await knex("warehouses").where({ id: newWarehouseId });
+            response.status(201).json(createdWarehouse);
         }
-    } catch{
+    } catch(error){
         response.status(500).json({
             message: `Can't create new warehouse: ${error}`
         })
