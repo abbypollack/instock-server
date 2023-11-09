@@ -74,9 +74,24 @@ const update = async (req, res) => {
     }
 };
 
+const remove = async (req, res) => {
+
+  const { id } = req.params;
+
+  const removeInventory = await knex('inventories')
+    .where({ id })
+    .del();
+
+  if (removeInventory > 0) {
+    res.status(204).send();
+  } else {
+    res.status(404).json({ error: 'Inventory item was not found' });
+  }
+};
 
 module.exports = {
     update,
     index,
-    find
+    find,
+    remove
 }
