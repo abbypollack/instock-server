@@ -31,7 +31,7 @@ const add = async (request, response) => {
         })
     }
     function isValidPhoneNumber(phoneNumber) {
-        var phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+        let phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
         return phoneRegex.test(phoneNumber);
     }
     function isValidEmail(email) {
