@@ -1,5 +1,28 @@
 const knex = require('knex')(require('../knexfile'));
 
+const index = async (_req, res) => {
+  try {
+      const data = await knex('inventories');
+      res.status(200).json(data);
+  } catch (error) {
+      res.status(400).send(`Error retrieving inventory: ${error}`)
+  }
+}
+const find = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex('inventories').where({ id }).first();
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.status(404).json({ error: 'Inventory item not found' });
+    }
+  } catch (error) {
+    res.status(400).send(`Error retrieving inventory: ${error}`);
+  }
+};
+
+
 const update = async (req, res) => {
     const { id } = req.params;
     const { warehouse_id, item_name, description, category, status, quantity } = req.body;
@@ -66,8 +89,9 @@ const remove = async (req, res) => {
   }
 };
 
-
 module.exports = {
     update,
+    index,
+    find,
     remove
 }

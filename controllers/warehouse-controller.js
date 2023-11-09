@@ -31,7 +31,7 @@ const add = async (request, response) => {
         })
     }
     function isValidPhoneNumber(phoneNumber) {
-        var phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+        let phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
         return phoneRegex.test(phoneNumber);
     }
     function isValidEmail(email) {
@@ -61,8 +61,31 @@ const edit = async (request, response) => {
     }
 };
 
+const remove = async (request, response) => {
+    try{
+        const deleteWarehouse = await knex('warehouses')
+        .where({ id: request.params.id })
+        .delete();
+
+        if (deleteWarehouse === 0){
+            return response
+            .status(404).json({
+                message: `Unable to remove Warehouse because it does not exist`
+            });
+        }
+        else{
+            response.sendStatus(204)
+        }
+    } catch (error) {
+        response.sendStatus(500).json({
+            message: `Unable to remove Warehouse ${error}`
+        });
+    }
+};
+
 module.exports = {
     index,
     add,
     edit,
+    remove,
 };
