@@ -22,7 +22,6 @@ const find = async (req, res) => {
   }
 };
 
-
 const update = async (req, res) => {
     const { id } = req.params;
     const { warehouse_id, item_name, description, category, status, quantity } = req.body;
@@ -75,13 +74,10 @@ const update = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-
   const { id } = req.params;
-
   const removeInventory = await knex('inventories')
     .where({ id })
     .del();
-
   if (removeInventory > 0) {
     res.status(204).send();
   } else {

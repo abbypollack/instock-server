@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const warehouseControl = require("../controllers/warehouse-controller");
-const { v4: uuidv4 } = require('uuid');
 
 router
     .route("/")
@@ -13,5 +12,9 @@ router
     .get(warehouseControl.search)
     .patch(warehouseControl.edit)
     .delete(warehouseControl.remove);
+
+router
+    .route("/:id/inventories")
+    .get(warehouseControl.inventory)
 
 module.exports = router;
