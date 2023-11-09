@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
     "db:migrate": "knex migrate:latest",
     "db:seed": "knex seed:run",
     "start": "nodemon index.js"
