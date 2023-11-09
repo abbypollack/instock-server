@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db:migrate": "knex migrate:latest",
-    "db:seed": "knex seed:run"
+    "migrate": "knex migrate:latest",
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +20,8 @@
     "knex": "^3.0.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
