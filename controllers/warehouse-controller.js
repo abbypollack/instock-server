@@ -61,8 +61,31 @@ const edit = async (request, response) => {
     }
 };
 
+const remove = async (request, response) => {
+    try{
+        const deleteWarehouse = await knex('warehouses')
+        .where({ id: request.params.id })
+        .delete();
+
+        if (deleteWarehouse === 0){
+            return response
+            .status(404).json({
+                message: `Unable to remove Warehouse because it does not exist`
+            });
+        }
+        else{
+            response.sendStatus(204)
+        }
+    } catch (error) {
+        response.sendStatus(500).json({
+            message: `Unable to remove Warehouse ${error}`
+        });
+    }
+};
+
 module.exports = {
     index,
     add,
     edit,
+    remove,
 };

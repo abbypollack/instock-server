@@ -1,7 +1,7 @@
 require ('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const inventoryRoutes = require('./routes/inventory'); // Importing router from inventory.js
+const inventoryRoutes = require('./routes/inventory-routes'); // Importing router from inventory.js
 
 
 
