@@ -12,5 +12,6 @@ router
     .route("/:id")
     .get(warehouseControl.index)
     .patch(warehouseControl.edit)
+    .delete(warehouseControl.remove);
 
 module.exports = router;
