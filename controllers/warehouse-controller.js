@@ -9,6 +9,21 @@ const index = async (_request, response) => {
     }
 }
 
+const search = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const data = await knex('warehouses').where({ id }).first();
+      if (data) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ error: 'Warehouse was not found' });
+      }
+    } catch (error) {
+      res.status(400).send(`Error retrieving warehouse: ${error}`);
+    }
+  };
+
+
 const add = async (request, response) => {
     try {
         const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = request.body;
@@ -85,6 +100,7 @@ const remove = async (request, response) => {
 
 module.exports = {
     index,
+    search,
     add,
     edit,
     remove,
