@@ -10,6 +10,7 @@ router
 // ******PUT/EDIT API FOR A SINGLE INVENTORY ITEM******
 router
     .route('/:id')
+    .get(inventoryController.find)
     .put(inventoryController.update)
 
 // ******END OF PUT/EDIT API FOR A SINGLE INVENTORY ITEM******
