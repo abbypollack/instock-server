@@ -85,9 +85,30 @@ const remove = async (req, res) => {
   }
 };
 
+const add = async (req, res) => {
+  try {
+    const { warehouse_id, item_name, description, category, status, quantity} = req.body;
+    if(!warehouse_id || !item_name || !description || !category || !status || !quantity) {
+      return res.status(400).json({error: "please fill in all required fields" });
+    } else if ( quantity < 0 ) {
+      return res.status(400).json({error: "quantity can't be less then zero"})
+    } 
+    const result = await knex('inventories').insert(req.body);
+
+    const newInventoryId = result[0];
+    const createdInventory = await knex('inventories').where({id: newInventoryId});
+    res.status(201).json(createdInventory);
+  } catch ( error ) {
+    res.status(500).json({
+      message: `Can't add new inventory item: ${error}`
+    })
+  }
+}
+
 module.exports = {
     update,
     index,
     find,
-    remove
+    remove,
+    add
 }

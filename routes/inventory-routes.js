@@ -3,17 +3,19 @@ const router = express.Router();
 const inventoryController = require ('../controllers/inventory-controller')
 
 
-// ******GET API FOR ALL INVENTORY ITEMS******
+// ******GET/POST API FOR ALL INVENTORY ITEMS******
 router
     .route('/')
     .get(inventoryController.index)
+    .post(inventoryController.add)
 
-// ******PUT/EDIT API FOR A SINGLE INVENTORY ITEM******
+// ******GET/PUT/DELETE API FOR A SINGLE INVENTORY ITEM******
 router
     .route('/:id')
-    .delete(inventoryController.remove)
     .get(inventoryController.find)
+    .delete(inventoryController.remove)
     .put(inventoryController.update)
+    
 
 
 
