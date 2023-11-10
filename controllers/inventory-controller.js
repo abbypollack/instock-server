@@ -11,7 +11,11 @@ const index = async (_req, res) => {
 const find = async (req, res) => {
   const { id } = req.params;
   try {
-    const data = await knex('inventories').where({ id }).first();
+    const data = await knex('inventories')
+      .join('warehouses', 'inventories.warehouse_id', 'warehouses.id')
+      .select('inventories.*', 'warehouses.warehouse_name')
+      .where('inventories.id', id)
+      .first();
     if (data) {
       res.status(200).json(data);
     } else {
