@@ -42,7 +42,7 @@ const add = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            message: `Can't create new warehouse: ${error}`
+            message: `Can't create new warehouse: ${error.message}`
         })
     }
     function isValidPhoneNumber(phoneNumber) {
