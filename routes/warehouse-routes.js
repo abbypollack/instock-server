@@ -10,7 +10,7 @@ router
 router
     .route("/:id")
     .get(warehouseControl.search)
-    .patch(warehouseControl.edit)
+    .put(warehouseControl.edit)
     .delete(warehouseControl.remove);
 
 router
