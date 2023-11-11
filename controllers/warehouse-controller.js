@@ -109,22 +109,25 @@ const edit = async (req, res) => {
 
 const remove = async (req, res) => {
     try {
+        const deletedInventories = await knex('inventories')
+            .where({ warehouse_id: req.params.id })
+            .del();
+
         const deleteWarehouse = await knex('warehouses')
             .where({ id: req.params.id })
-            .delete();
+            .del();
 
         if (deleteWarehouse === 0) {
-            return res
-                .status(404).json({
-                    message: `Unable to remove Warehouse because it does not exist`
-                });
+            return res.status(404).json({
+                message: `Unable to remove Warehouse because it does not exist`
+            });
         }
         else {
-            res.sendStatus(204)
+            res.status(204)
         }
     } catch (error) {
-        res.sendStatus(500).json({
-            message: `Unable to remove Warehouse ${error}`
+        res.status(500).json({
+            message: `Unable to remove Warehouse: ${error.message}`
         });
     }
 };
