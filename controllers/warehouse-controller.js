@@ -1,11 +1,11 @@
 const knex = require('knex')(require('../knexfile'));
 
-const index = async (_request, response) => {
+const index = async (_req, res) => {
     try {
         const data = await knex('warehouses');
-        response.status(200).json(data);
+        res.status(200).json(data);
     } catch (error) {
-        response.status(400).send(`Error retrieving warehouse: ${error}`)
+        res.status(400).send(`Error retrieving warehouse: ${error}`)
     }
 }
 
@@ -18,35 +18,35 @@ const search = async (req, res) => {
         } else {
             res.status(404).json({ error: 'Warehouse was not found' });
         }
-        } catch (error) {
+    } catch (error) {
         res.status(400).send(`Error retrieving warehouse: ${error}`);
-        }
-    };
+    }
+};
 
 
-const add = async (request, response) => {
+const add = async (req, res) => {
     try {
-        const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = request.body;
+        const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
         if (!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email) {
-            return response.status(400).json({ error: "Please fill in all required fields" });
+            return res.status(400).json({ error: "Please fill in all required fields" });
         } else if (!isValidPhoneNumber(contact_phone)) {
-            return response.status(400).json({ error: "Invalid phone number" });
+            return res.status(400).json({ error: "Invalid phone number" });
         } else if (!isValidEmail(contact_email)) {
-            return response.status(400).json({ error: "Invalid email" });
+            return res.status(400).json({ error: "Invalid email" });
         } else {
-            const result = await knex('warehouses').insert(request.body);
+            const result = await knex('warehouses').insert(req.body);
 
             const newWarehouseId = result[0];
             const createdWarehouse = await knex("warehouses").where({ id: newWarehouseId });
-            response.status(201).json(createdWarehouse);
+            res.status(201).json(createdWarehouse);
         }
     } catch (error) {
-        response.status(500).json({
+        res.status(500).json({
             message: `Can't create new warehouse: ${error}`
         })
     }
     function isValidPhoneNumber(phoneNumber) {
-        let phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+        const phoneRegex = /^\+?1?\s*\(\d{3}\)\s*\d{3}-\d{4}$/;
         return phoneRegex.test(phoneNumber);
     }
     function isValidEmail(email) {
@@ -55,44 +55,75 @@ const add = async (request, response) => {
     }
 }
 
-const edit = async (request, response) => {
-    try {
-        const editWarehouse = await knex('warehouses')
-            .where({ id: request.params.id })
-            .update(request.body);
-        if (editWarehouse === 0) {
-            return response.status(404).json({
-                message: `Cannot find a warehouse with that ID of ${request.params.id}`
-            });
-        }
-        else{
-            response.status(201).json(editWarehouse);
-        }
+const edit = async (req, res) => {
+    const { id } = req.params;
+    const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
 
+    if (!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const isValidPhoneNumber = (phoneNumber) => {
+        const phoneRegex = /^\+?1?\s*\(\d{3}\)\s*\d{3}-\d{4}$/;
+        return phoneRegex.test(phoneNumber);
+    };
+
+    if (!isValidPhoneNumber(contact_phone)) {
+        return res.status(400).json({ error: "Invalid phone number" });
+    }
+
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    if (!isValidEmail(contact_email)) {
+        return res.status(400).json({ error: "Invalid email" });
+    }
+
+    try {
+        const updatedRows = await knex('warehouses')
+            .where({ id })
+            .update({
+                warehouse_name,
+                address,
+                city,
+                country,
+                contact_name,
+                contact_position,
+                contact_phone,
+                contact_email
+            });
+
+        if (updatedRows) {
+            const updatedWarehouse = await knex('warehouses').where({ id }).first();
+            res.status(200).json(updatedWarehouse);
+        } else {
+            res.status(404).json({ error: `Cannot find a warehouse with the ID ${id}` });
+        }
     } catch (error) {
-        response.status(500).json({
-            message: `sorry coudn't update ${request.params.id}:${error}`
-        })
+        console.error(error);
+        res.status(500).json({ message: `sorry coudn't update ${id}:${error}` });
     }
 };
 
-const remove = async (request, response) => {
-    try{
+const remove = async (req, res) => {
+    try {
         const deleteWarehouse = await knex('warehouses')
-        .where({ id: request.params.id })
-        .delete();
+            .where({ id: req.params.id })
+            .delete();
 
-        if (deleteWarehouse === 0){
-            return response
-            .status(404).json({
-                message: `Unable to remove Warehouse because it does not exist`
-            });
+        if (deleteWarehouse === 0) {
+            return res
+                .status(404).json({
+                    message: `Unable to remove Warehouse because it does not exist`
+                });
         }
-        else{
-            response.sendStatus(204)
+        else {
+            res.sendStatus(204)
         }
     } catch (error) {
-        response.sendStatus(500).json({
+        res.sendStatus(500).json({
             message: `Unable to remove Warehouse ${error}`
         });
     }
