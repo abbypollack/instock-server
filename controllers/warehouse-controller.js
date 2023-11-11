@@ -123,7 +123,7 @@ const remove = async (req, res) => {
             });
         }
         else {
-            res.status(204)
+            res.sendStatus(204)
         }
     } catch (error) {
         res.status(500).json({
