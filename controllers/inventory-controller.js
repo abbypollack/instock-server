@@ -36,7 +36,7 @@ const update = async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  if (status.toLowerCase() === 'in stock' && (typeof quantity !== 'number' || quantity < 0)) {
+  if (status.toLowerCase() === 'in stock' && (isNaN(quantity)|| quantity < 0)) {
     return res.status(400).json({ error: 'Quantity must be a non-negative number when in stock' });
   }
 
