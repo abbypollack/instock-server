@@ -89,9 +89,15 @@ const add = async (req, res) => {
     const { warehouse_id, item_name, description, category, status, quantity } = req.body;
     if (!warehouse_id || !item_name || !description || !category || !status || !quantity) {
       return res.status(400).json({ error: "please fill in all required fields" });
-    } else if (quantity < 0) {
+    } else if (isNaN(quantity) || quantity < 0) {
       return res.status(400).json({ error: "quantity can't be less then zero" })
     }
+
+    const warehouse = await knex('warehouses').where({ id: warehouse_id }).first();
+    if (!warehouse) {
+      return res.status(400).json({ error: "Warehouse ID does not exist" });
+    }
+
     const result = await knex('inventories').insert(req.body);
 
     const newInventoryId = result[0];
