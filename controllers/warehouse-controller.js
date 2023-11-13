@@ -46,7 +46,7 @@ const add = async (req, res) => {
         })
     }
     function isValidPhoneNumber(phoneNumber) {
-        const phoneRegex = /^\+?1?\s*\(\d{3}\)\s*\d{3}-\d{4}$/;
+        const phoneRegex = /^\+?1?\s*(\(\d{3}\)|\d{3})[\s-]*\d{3}[\s-]*\d{4}$/;
         return phoneRegex.test(phoneNumber);
     }
     function isValidEmail(email) {
@@ -64,7 +64,7 @@ const edit = async (req, res) => {
     }
 
     const isValidPhoneNumber = (phoneNumber) => {
-        const phoneRegex = /^\+?1?\s*\(\d{3}\)\s*\d{3}-\d{4}$/;
+        const phoneRegex = /^\+?1?\s*(\(\d{3}\)|\d{3})[\s-]*\d{3}[\s-]*\d{4}$/;
         return phoneRegex.test(phoneNumber);
     };
 
