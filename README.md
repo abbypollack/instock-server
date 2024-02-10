@@ -12,6 +12,7 @@
 
 **Usage**
 - Access the API endpoints through http://localhost:8081/api/....
+  
 _Inventory Endpoints:_
 * GET /api/inventories to retrieve all inventory items.
 * POST /api/inventories to add a new inventory item.
